@@ -48,7 +48,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary"
           >
             <span className="size-1.5 rounded-full bg-primary" />
-            फुटबॉल लवर्स · Made for Indian Turf
+            फुटबॉल लवर्स
           </motion.span>
 
           <motion.h1
