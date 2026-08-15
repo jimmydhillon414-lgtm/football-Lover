@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useCart } from '@/components/cart/cart-context'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
-import {LoginComponent}from '@/components/login'
+import { LoginComponent } from '@/components/login'
 
 const NAV = [
   { label: 'Shop', href: '#catalog' },
@@ -17,6 +17,7 @@ const NAV = [
 export function SiteHeader() {
   const { count, open } = useCart()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -31,7 +32,7 @@ export function SiteHeader() {
           >
             {mobileOpen ? <X /> : <Menu />}
           </Button>
-          <a href="#top" aria-label="Football Lovers home">
+          <a href="/" aria-label="Football Lovers home">
             <Logo />
           </a>
         </div>
@@ -52,9 +53,9 @@ export function SiteHeader() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
           </Button>
-          <Button variant="ghost" size="sm" aria-label="Login">
-  Login
-</Button>
+          <Button variant="ghost" size="sm" aria-label="Login" onClick={() => setIsLoginOpen(true)}>
+            Login
+          </Button>
           <Button
             variant="ghost"
             size="icon"
@@ -64,7 +65,7 @@ export function SiteHeader() {
           >
             <ShoppingBag />
             {count > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
                 {count}
               </span>
             )}
@@ -72,9 +73,11 @@ export function SiteHeader() {
         </div>
       </div>
 
+      {isLoginOpen && <LoginComponent />}
+
       {mobileOpen && (
         <nav className="border-t border-border/70 bg-background px-4 py-3 md:hidden">
-          <ul className="flex flex-col">
+          <ul className="flex flex-col gap-2">
             {NAV.map((item) => (
               <li key={item.href}>
                 <a
