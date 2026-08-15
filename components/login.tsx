@@ -45,7 +45,7 @@ export function LoginComponent() {
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
-          <a href="/sign-up" className="text-primary hover:underline">
+         setIsSignUpOpen(true)} className="text-primary hover:underline">Sign up</button>
             Sign up
           </a>
         </p>
