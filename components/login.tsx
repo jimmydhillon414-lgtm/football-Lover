@@ -2,10 +2,12 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { SignUp } from '@/components/sign-up';
 
 export function LoginComponent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,11 +47,12 @@ export function LoginComponent() {
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
-        <button onClick={()=> setIsSignUpOpen(true)} className="text-primary hover:underline">Sign up</button>
+          <button onClick={() => setIsSignUpOpen(true)} className="text-primary hover:underline">
             Sign up
-          </a>
+          </button>
         </p>
       </div>
+      {isSignUpOpen && <SignUp />}
     </div>
   );
 }
