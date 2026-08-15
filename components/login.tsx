@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SignUp } from '@/components/sign-up';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 export function LoginComponent() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export function LoginComponent() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Signing in with', email, password);
-  }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-background">
@@ -47,12 +48,18 @@ export function LoginComponent() {
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
-          <button onClick={() => setIsSignUpOpen(true)} className="text-primary hover:underline">
-            Sign up
-          </button>
+          <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
+            <DialogTrigger asChild>
+              <Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal">
+                Sign up
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <SignUp />
+            </DialogContent>
+          </Dialog>
         </p>
       </div>
-      {isSignUpOpen && <SignUp />}
     </div>
   );
 }
