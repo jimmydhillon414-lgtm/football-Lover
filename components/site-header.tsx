@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useCart } from '@/components/cart/cart-context'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
+import {LoginComponent}from '@/components/login'
 
 const NAV = [
   { label: 'Shop', href: '#catalog' },
