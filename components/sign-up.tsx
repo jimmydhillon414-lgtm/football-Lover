@@ -23,7 +23,8 @@ export function SignUp() {
       setMessage({ text: 'Password must be at least 8 characters long.', type: 'error' });
       return;
     }
-if (password !== confirmPassword) {
+
+    if (password !== confirmPassword) {
       setMessage({ text: 'Password and confirm password do not match.', type: 'error' });
       return;
     }
