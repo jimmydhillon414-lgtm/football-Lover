@@ -45,7 +45,7 @@ export function LoginComponent() {
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
-         setIsSignUpOpen(true)} className="text-primary hover:underline">Sign up</button>
+        <button onClick={()=> setIsSignUpOpen(true)} className="text-primary hover:underline">Sign up</button>
             Sign up
           </a>
         </p>
