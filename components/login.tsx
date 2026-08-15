@@ -9,7 +9,6 @@ export function LoginComponent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // यहाँ पर ऑथेंटिकेशन लॉजिक जोड़ा जाएगा
     console.log('Signing in with', email, password);
   }
 
@@ -36,7 +35,7 @@ export function LoginComponent() {
               id="password"
               className="w-full p-2 border rounded-md"
               value={password}
-              onChange={(e) => setPassword(e.target.s setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
