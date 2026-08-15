@@ -6,6 +6,7 @@ import { useCart } from '@/components/cart/cart-context'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { LoginComponent } from '@/components/login'
+import { LoginComponent } from '@/components/sign-up'
 
 const NAV = [
   { label: 'Shop', href: '#catalog' },
