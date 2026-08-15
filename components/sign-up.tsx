@@ -14,7 +14,7 @@ export function SignUp() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\d{10}$/;
 
-    if (!emailRegex.test(identifier) || !phoneRegex.test(identifier)) {
+    if (!emailRegex.test(identifier) && !phoneRegex.test(identifier)) {
       setMessage({ text: 'Please enter a valid email or 10-digit mobile number.', type: 'error' });
       return;
     }
