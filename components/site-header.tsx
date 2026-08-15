@@ -6,6 +6,7 @@ import { useCart } from '@/components/cart/cart-context'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { LoginComponent } from '@/components/login'
+import { SignUp } from '@/components/sign-up'
 
 const NAV = [
   { label: 'Shop', href: '#catalog' },
@@ -18,6 +19,7 @@ export function SiteHeader() {
   const { count, open } = useCart()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -56,10 +58,12 @@ export function SiteHeader() {
           <Button variant="ghost" size="sm" aria-label="Login" onClick={() => setIsLoginOpen(true)}>
             Login
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setIsSignUpOpen(true)}>
+            Sign Up
+          </Button>
           <Button
             variant="ghost"
             size="icon"
-            aria-label={`Open cart, ${count} items`}
             onClick={open}
             className="relative"
           >
@@ -74,6 +78,7 @@ export function SiteHeader() {
       </div>
 
       {isLoginOpen && <LoginComponent />}
+      {isSignUpOpen && <SignUp />}
 
       {mobileOpen && (
         <nav className="border-t border-border/70 bg-background px-4 py-3 md:hidden">
@@ -83,7 +88,7 @@ export function SiteHeader() {
                 <a
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block py-2.5 text-base font-semibold text-foreground transition-colors hover:text-primary"
+                  className="block py-2.5 text-base font-semibold text-muted-foreground transition-colors hover:text-primary"
                 >
                   {item.label}
                 </a>
