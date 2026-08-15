@@ -51,6 +51,9 @@ export function SiteHeader() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
           </Button>
+          <Button variant="ghost" size="sm" aria-label="Login">
+  Login
+</Button>
           <Button
             variant="ghost"
             size="icon"
