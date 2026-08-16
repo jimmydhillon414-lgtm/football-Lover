@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 
 export function SignUp() {
   const [identifier, setIdentifier] = useState('');
@@ -7,7 +7,7 @@ export function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
