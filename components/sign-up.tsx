@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export function SignUp() {
@@ -100,9 +99,9 @@ export function SignUp() {
             />
           </div>
 
-          <Button type="submit" className="w-full p-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl transition">
+          <button type="submit" className="w-full p-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl transition">
             Sign Up
-          </Button>
+          </button>
         </form>
       </div>
     </div>
