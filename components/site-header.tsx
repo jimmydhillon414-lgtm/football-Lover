@@ -34,6 +34,7 @@ export function SiteHeader() {
           >
             {mobileOpen ? <X /> : <Menu />}
           </Button>
+
           <a href="/" aria-label="Football Lovers home">
             <Logo />
           </a>
@@ -55,19 +56,32 @@ export function SiteHeader() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
           </Button>
-          <Button variant="ghost" size="sm" aria-label="Login" onClick={() => setIsLoginOpen(true)}>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label="Login"
+            onClick={() => setIsLoginOpen(true)}
+          >
             Login
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setIsSignUpOpen(true)}>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsSignUpOpen(true)}
+          >
             Sign Up
           </Button>
+
           <Button
             variant="ghost"
             size="icon"
             onClick={open}
             className="relative"
           >
-            <ShoppingBag /> 
+            <ShoppingBag />
+
             {count > 0 && (
               <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
                 {count}
