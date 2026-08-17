@@ -1,17 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { SignUp } from '@/components/sign-up';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 export function LoginComponent() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // यहाँ पर ऑथेंटिकेशन लॉजिक जोड़ा जाएगा
-    console.log('Logging in with', email, password)
-  }
+    e.preventDefault();
+    console.log('Signing in with', email, password);
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-background">
@@ -19,9 +21,7 @@ export function LoginComponent() {
         <h2 className="text-2xl font-bold mb-6 text-center text-card-foreground">Login to Football Lovers</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium text-card-foreground" htmlFor="email">
-              Email
-            </label>
+            <label className="block mb-2 text-sm font-medium text-card-foreground" htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
@@ -32,9 +32,7 @@ export function LoginComponent() {
             />
           </div>
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-card-foreground" htmlFor="password">
-              Password
-            </label>
+            <label className="block mb-2 text-sm font-medium text-card-foreground" htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -48,7 +46,20 @@ export function LoginComponent() {
             Login
           </Button>
         </form>
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          Don't have an account?{' '}
+          <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
+            <DialogTrigger asChild>
+              <Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal">
+                Sign up
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <SignUp />
+            </DialogContent>
+          </Dialog>
+        </p>
       </div>
     </div>
-  )
+  );
 }

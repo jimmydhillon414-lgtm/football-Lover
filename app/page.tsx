@@ -5,7 +5,7 @@ import { CustomLab } from '@/components/custom-lab'
 import { Hero } from '@/components/hero'
 import { ProductCatalog } from '@/components/product-catalog'
 import { SiteFooter } from '@/components/site-footer'
-import { SiteHeader } from '@/components/site-header'
+import { SiteHeader } from '@/components/site-header' 
 import { Testimonials } from '@/components/testimonials'
 
 export default function HomePage() {

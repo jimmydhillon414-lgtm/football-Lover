@@ -1,67 +1,109 @@
-
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { createBrowserClient } from '@supabase/ssr';
 
 export function SignUp() {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Signing up with', email, password);
+  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); 
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    if (!emailRegex.test(identifier) && !phoneRegex.test(identifier)) {
+      setMessage({ text: 'Please enter a valid email or 10-digit mobile number.', type: 'error' });
+      return;
+    }
+
+    if (password.length < 8) {
+      setMessage({ text: 'Password must be at least 8 characters long.', type: 'error' });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setMessage({ text: 'Password and confirm password do not match.', type: 'error' });
+      return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email: identifier,
+      password: password,
+    });
+
+    if (error) {
+      setMessage({ text: error.message, type: 'error' });
+    } else {
+      setMessage({ text: 'Registration successful!', type: 'success' });
+      console.log('Signed up with:', identifier, password);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-background">
-      <div className="p-8 border rounded-lg shadow-lg w-full max-w-md bg-card">
-        <h2 className="text-2xl font-bold mb-6 text-center text-card-foreground">
-          Sign Up for Football Lovers
+    <div className="flex justify-center items-center h-screen bg-[#060b13] relative overflow-hidden">
+      <div className="absolute w-[400px] h-[400px] bg-green-500/20 rounded-full blur-[100px] top-[-100px] left-[-100px]" />
+      <div className="absolute w-[400px] h-[400px] bg-blue-500/20 rounded-full blur-[100px] bottom-[-100px] right-[-100px]" />
+      
+      <div className="relative z-10 p-8 w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
+        <h2 className="text-3xl font-bold mb-6 text-center text-white">
+          Sign Up For Football Lovers
         </h2>
+        
+        {message && (
+          <div className={`p-4 mb-4 rounded-xl text-sm font-medium ${message.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+            {message.text}
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium text-card-foreground">
-              Email
+            <label className="block mb-2 text-sm font-medium text-white/70">
+              Email / Mobile Number
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded-md"
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-green-500 transition"
               required
             />
           </div>
+          
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium text-card-foreground">
+            <label className="block mb-2 text-sm font-medium text-white/70">
               Password
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-green-500 transition"
               required
             />
           </div>
+
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-card-foreground">
+            <label className="block mb-2 text-sm font-medium text-white/70">
               Confirm Password
             </label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-2 border-md"
+              className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-green-500 transition"
               required
             />
           </div>
-          <Button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md">
+
+          <button type="submit" className="w-full p-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl transition">
             Sign Up
-          </Button>
+          </button>
         </form>
       </div>
     </div>
   );
 }
-
-आप इसे कॉपी करके अपनी प्रोजेक्ट में sign-up.tsx फ़ाइल में रख सकते हैं।
