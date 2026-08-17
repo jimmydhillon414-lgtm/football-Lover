@@ -1,4 +1,5 @@
 'use client'
+
 import { Menu, Search, ShoppingBag, X } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '@/components/cart/cart-context'
