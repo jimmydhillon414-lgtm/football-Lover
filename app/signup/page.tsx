@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient'; // Adjust path if your file is in another folder
 
