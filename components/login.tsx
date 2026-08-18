@@ -59,7 +59,7 @@ export function LoginComponent() {
               <SignUp />
             </DialogContent>
            </Dialog>  */}
-          <Link href="/sign-up"><Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal">Sign up</Button></Link>
+          <Link href="/signup"><Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal">Sign up</Button></Link>
         </p>
       </div>
     </div>
