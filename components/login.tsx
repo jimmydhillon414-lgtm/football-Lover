@@ -18,7 +18,7 @@ export function LoginComponent() {
   return (
     <div className="flex justify-center items-center h-screen bg-background">
       <div className="p-8 border rounded-lg shadow-lg w-full max-w-md bg-card">
-        <h2 className="text-2xl font-bold mb-6 text-center text-card-foreground">Login to Football Lovers</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-card-foreground">Login </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-card-foreground" htmlFor="email">Email</label>
