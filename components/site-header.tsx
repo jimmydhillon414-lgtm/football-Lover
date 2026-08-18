@@ -55,23 +55,27 @@ export function SiteHeader() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
           </Button>
-          <Button 
-  variant="ghost" 
-  size="sm" 
-  aria-label="Login" 
-  onClick={() => { setIsLoginOpen(true); setIsSignupOpen(false); }}
->
-  Login
-</Button>
 
-<Button 
-  variant="ghost" 
-  size="sm" 
-  aria-label="Sign Up" 
-  onClick={() => { setIsSignupOpen(true); setIsLoginOpen(false); }}
-> 
-  Sign Up 
-</Button>
+          {/* Login Button */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            aria-label="Login" 
+            onClick={() => { setIsLoginOpen(true); setIsSignUpOpen(false); }}
+          >
+            Login
+          </Button>
+
+          {/* Sign Up Button */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            aria-label="Sign Up" 
+            onClick={() => { setIsSignUpOpen(true); setIsLoginOpen(false); }}
+          > 
+            Sign Up 
+          </Button>
+
           <Button
             variant="ghost"
             size="icon"
@@ -88,9 +92,36 @@ export function SiteHeader() {
           </Button>
         </div>
       </div>
-      {isSignUpOpen && <SignUp />}
-      {isLoginOpen && <LoginComponent />}
 
+      {/* Render SignUp Modal with Close Overlay */}
+      {isSignUpOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <button
+            onClick={() => setIsSignUpOpen(false)}
+            className="fixed top-6 right-6 z-50 text-white/80 hover:text-white font-bold text-2xl transition"
+            aria-label="Close Sign Up"
+          >
+            ✕
+          </button>
+          <SignUp />
+        </div>
+      )}
+
+      {/* Render Login Modal with Close Overlay */}
+      {isLoginOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <button
+            onClick={() => setIsLoginOpen(false)}
+            className="fixed top-6 right-6 z-50 text-white/80 hover:text-white font-bold text-2xl transition"
+            aria-label="Close Login"
+          >
+            ✕
+          </button>
+          <LoginComponent />
+        </div>
+      )}
+
+      {/* Mobile Menu */}
       {mobileOpen && (
         <nav className="border-t border-border/70 bg-background px-4 py-3 md:hidden">
           <ul className="flex flex-col gap-2">
@@ -111,4 +142,3 @@ export function SiteHeader() {
     </header>
   )
 }
-
