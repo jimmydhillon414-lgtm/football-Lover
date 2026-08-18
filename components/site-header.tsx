@@ -19,7 +19,6 @@ export function SiteHeader() {
   const { count, open } = useCart()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -34,7 +33,6 @@ export function SiteHeader() {
           >
             {mobileOpen ? <X /> : <Menu />}
           </Button>
-
           <a href="/" aria-label="Football Lovers home">
             <Logo />
           </a>
@@ -56,32 +54,17 @@ export function SiteHeader() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
           </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            aria-label="Login"
-            onClick={() => setIsLoginOpen(true)}
-          >
+          <Button variant="ghost" size="sm" aria-label="Login" onClick={() => setIsLoginOpen(true)}>
             Login
           </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsSignUpOpen(true)}
-          >
-            Sign Up
-          </Button>
-
           <Button
             variant="ghost"
             size="icon"
+            aria-label={`Open cart, ${count} items`}
             onClick={open}
             className="relative"
           >
             <ShoppingBag />
-
             {count > 0 && (
               <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
                 {count}
@@ -92,7 +75,6 @@ export function SiteHeader() {
       </div>
 
       {isLoginOpen && <LoginComponent />}
-      {isSignUpOpen && <SignUp />}
 
       {mobileOpen && (
         <nav className="border-t border-border/70 bg-background px-4 py-3 md:hidden">
@@ -102,7 +84,7 @@ export function SiteHeader() {
                 <a
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block py-2.5 text-base font-semibold text-muted-foreground transition-colors hover:text-primary"
+                  className="block py-2.5 text-base font-semibold text-foreground transition-colors hover:text-primary"
                 >
                   {item.label}
                 </a>
@@ -114,3 +96,4 @@ export function SiteHeader() {
     </header>
   )
 }
+
