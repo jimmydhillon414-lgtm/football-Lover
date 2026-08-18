@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient'; // Adjust path if your file is in another folder
+import Link from 'next/link';
 
 export default function SignUp() {
   const [identifier, setIdentifier] = useState('');
