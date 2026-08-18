@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient'; // Adjust path if your file is in another folder
 
-export function SignUp() {
+export function default SignUp() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
