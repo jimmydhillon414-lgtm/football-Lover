@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { SignUp } from '@/components/sign-up';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import Link from 'next/link';
 
 export function LoginComponent() {
   const [email, setEmail] = useState('');
