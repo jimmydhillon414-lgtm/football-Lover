@@ -50,7 +50,7 @@ export function LoginComponent() {
           Don't have an account?{' '}
           <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
             <DialogTrigger asChild>
-              <Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal" onClick={() => setIsSignUpOpen(true)}>
+              <Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal"}>
                 Sign up
               </Button>
             </DialogTrigger>
