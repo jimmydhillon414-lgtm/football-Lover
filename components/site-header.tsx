@@ -23,10 +23,24 @@ export function SiteHeader() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  // Ensure portal only renders on the client side
+  // Ensure portal only renders on client side
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Lock background scrolling when either modal is open
+  useEffect(() => {
+    if (isSignUpOpen || isLoginOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isSignUpOpen, isLoginOpen])
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -100,7 +114,7 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Render SignUp inside React Portal (body) */}
+      {/* Render SignUp inside React Portal */}
       {mounted && isSignUpOpen && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
           <button
@@ -117,7 +131,7 @@ export function SiteHeader() {
         document.body
       )}
 
-      {/* Render Login inside React Portal (body) */}
+      {/* Render Login inside React Portal */}
       {mounted && isLoginOpen && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
           <button
