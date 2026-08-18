@@ -48,7 +48,7 @@ export function LoginComponent() {
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Don't have an account?{' '}
-          <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}>
+           {/* <Dialog open={isSignUpOpen} onOpenChange={setIsSignUpOpen}> 
             <DialogTrigger asChild>
               <Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal">
                 Sign up
@@ -57,7 +57,8 @@ export function LoginComponent() {
             <DialogContent>
               <SignUp />
             </DialogContent>
-          </Dialog>
+           </Dialog>  */}
+          <Link href="/sign-up"><Button variant="link" className="text-primary hover:underline p-0 h-auto font-normal">Sign up</Button></Link>
         </p>
       </div>
     </div>
