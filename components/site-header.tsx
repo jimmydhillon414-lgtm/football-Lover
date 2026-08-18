@@ -1,7 +1,8 @@
 'use client'
 
 import { Menu, Search, ShoppingBag, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useCart } from '@/components/cart/cart-context'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
@@ -20,6 +21,12 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isSignUpOpen, setIsSignUpOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // Ensure portal only renders on the client side
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -93,32 +100,38 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Render SignUp Modal with Close Overlay */}
-      {isSignUpOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Render SignUp inside React Portal (body) */}
+      {mounted && isSignUpOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
           <button
             onClick={() => setIsSignUpOpen(false)}
-            className="fixed top-6 right-6 z-50 text-white/80 hover:text-white font-bold text-2xl transition"
+            className="fixed top-6 right-6 z-[10000] text-white/80 hover:text-white font-bold text-3xl transition bg-black/40 rounded-full w-10 h-10 flex items-center justify-center"
             aria-label="Close Sign Up"
           >
             ✕
           </button>
-          <SignUp />
-        </div>
+          <div className="w-full max-w-md my-auto">
+            <SignUp />
+          </div>
+        </div>,
+        document.body
       )}
 
-      {/* Render Login Modal with Close Overlay */}
-      {isLoginOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Render Login inside React Portal (body) */}
+      {mounted && isLoginOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
           <button
             onClick={() => setIsLoginOpen(false)}
-            className="fixed top-6 right-6 z-50 text-white/80 hover:text-white font-bold text-2xl transition"
+            className="fixed top-6 right-6 z-[10000] text-white/80 hover:text-white font-bold text-3xl transition bg-black/40 rounded-full w-10 h-10 flex items-center justify-center"
             aria-label="Close Login"
           >
             ✕
           </button>
-          <LoginComponent />
-        </div>
+          <div className="w-full max-w-md my-auto">
+            <LoginComponent />
+          </div>
+        </div>,
+        document.body
       )}
 
       {/* Mobile Menu */}
