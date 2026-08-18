@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 
 export function SignUp() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+  // Prevent client re-instantiation on every render
+  const supabase = useMemo(
+    () =>
+      createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      ),
+    []
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); 
+    e.preventDefault();
+    setMessage(null);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\d{10}$/;
 
-    if (!emailRegex.test(identifier) && !phoneRegex.test(identifier)) {
+    const isEmail = emailRegex.test(identifier);
+    const isPhone = phoneRegex.test(identifier);
+
+    if (!isEmail && !isPhone) {
       setMessage({ text: 'Please enter a valid email or 10-digit mobile number.', type: 'error' });
       return;
     }
@@ -30,16 +43,40 @@ export function SignUp() {
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
-      email: identifier,
-      password: password,
-    });
+    setLoading(true);
 
-    if (error) {
-      setMessage({ text: error.message, type: 'error' });
-    } else {
-      setMessage({ text: 'Registration successful!', type: 'success' });
-      console.log('Signed up with:', identifier, password);
+    try {
+      let error;
+
+      // Properly route based on email vs phone
+      if (isEmail) {
+        const res = await supabase.auth.signUp({
+          email: identifier,
+          password: password,
+        });
+        error = res.error;
+      } else {
+        // Formats 10-digit phone number for Supabase E.164 requirement (e.g. +91 / +1)
+        const formattedPhone = identifier.startsWith('+') ? identifier : `+${identifier}`;
+        const res = await supabase.auth.signUp({
+          phone: formattedPhone,
+          password: password,
+        });
+        error = res.error;
+      }
+
+      if (error) {
+        setMessage({ text: error.message, type: 'error' });
+      } else {
+        setMessage({ text: 'Registration successful! Check your email/phone for verification.', type: 'success' });
+        setIdentifier('');
+        setPassword('');
+        setConfirmPassword('');
+      }
+    } catch (err: any) {
+      setMessage({ text: err.message || 'An unexpected error occurred.', type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,8 +136,12 @@ export function SignUp() {
             />
           </div>
 
-          <button type="submit" className="w-full p-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl transition">
-            Sign Up
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full p-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-black font-bold rounded-xl transition"
+          >
+            {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
         </form>
       </div>
