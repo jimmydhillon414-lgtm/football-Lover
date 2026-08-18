@@ -19,6 +19,7 @@ export function SiteHeader() {
   const { count, open } = useCart()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -54,6 +55,7 @@ export function SiteHeader() {
           <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
           </Button>
+          
           <Button variant="ghost" size="sm" aria-label="Login" onClick={() => setIsLoginOpen(true)}>
             Login
           </Button>
@@ -74,7 +76,7 @@ export function SiteHeader() {
           </Button>
         </div>
       </div>
-
+      {isSignUpOpen && <Signup />}
       {isLoginOpen && <LoginComponent />}
 
       {mobileOpen && (
