@@ -76,7 +76,7 @@ export function SiteHeader() {
           </Button>
         </div>
       </div>
-      {isSignUpOpen && <Signup />}
+      {isSignUpOpen && <SignUp />}
       {isLoginOpen && <LoginComponent />}
 
       {mobileOpen && (
