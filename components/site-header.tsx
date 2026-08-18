@@ -57,6 +57,7 @@ export function SiteHeader() {
           <Button variant="ghost" size="sm" aria-label="Login" onClick={() => setIsLoginOpen(true)}>
             Login
           </Button>
+          <Button variant="ghost" size="sm" aria-label="Sign Up" onClick={() => setIsSignUpOpen(true)}> Sign Up </Button>
           <Button
             variant="ghost"
             size="icon"
