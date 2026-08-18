@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import React, { useState } from 'react';
+import { supabase } from '@/lib/supabaseClient'; // Import initialized instance
 
 export function SignUp() {
   const [identifier, setIdentifier] = useState('');
@@ -7,16 +7,6 @@ export function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
-
-  // Prevent client re-instantiation on every render 
-  const supabase = useMemo(
-    () =>
-      createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      ),
-    []
-  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +38,6 @@ export function SignUp() {
     try {
       let error;
 
-      // Properly route based on email vs phone
       if (isEmail) {
         const res = await supabase.auth.signUp({
           email: identifier,
@@ -56,7 +45,6 @@ export function SignUp() {
         });
         error = res.error;
       } else {
-        // Formats 10-digit phone number for Supabase E.164 requirement (e.g. +91 / +1)
         const formattedPhone = identifier.startsWith('+') ? identifier : `+${identifier}`;
         const res = await supabase.auth.signUp({
           phone: formattedPhone,
@@ -68,7 +56,7 @@ export function SignUp() {
       if (error) {
         setMessage({ text: error.message, type: 'error' });
       } else {
-        setMessage({ text: 'Registration successful! Check your email/phone for verification.', type: 'success' });
+        setMessage({ text: 'Registration successful! Check your inbox/SMS for verification.', type: 'success' });
         setIdentifier('');
         setPassword('');
         setConfirmPassword('');
@@ -84,18 +72,18 @@ export function SignUp() {
     <div className="flex justify-center items-center h-screen bg-[#060b13] relative overflow-hidden">
       <div className="absolute w-[400px] h-[400px] bg-green-500/20 rounded-full blur-[100px] top-[-100px] left-[-100px]" />
       <div className="absolute w-[400px] h-[400px] bg-blue-500/20 rounded-full blur-[100px] bottom-[-100px] right-[-100px]" />
-      
+
       <div className="relative z-10 p-8 w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Sign Up For Football Lovers
         </h2>
-        
+
         {message && (
           <div className={`p-4 mb-4 rounded-xl text-sm font-medium ${message.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
             {message.text}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-white/70">
@@ -109,7 +97,7 @@ export function SignUp() {
               required
             />
           </div>
-          
+
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-white/70">
               Password
@@ -136,8 +124,8 @@ export function SignUp() {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
             className="w-full p-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-black font-bold rounded-xl transition"
           >
