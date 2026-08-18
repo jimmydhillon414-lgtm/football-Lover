@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient'; // Import initialized instance
+import { supabase } from '@/lib/supabaseClient'; // Adjust path if your file is in another folder
 
 export function SignUp() {
   const [identifier, setIdentifier] = useState('');
