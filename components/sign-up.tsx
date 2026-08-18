@@ -8,7 +8,7 @@ export function SignUp() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  // Prevent client re-instantiation on every render
+  // Prevent client re-instantiation on every render 
   const supabase = useMemo(
     () =>
       createBrowserClient(
