@@ -75,7 +75,7 @@ export function SignUp() {
 
       <div className="relative z-10 p-8 w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
-          Sign Up For Football Lovers
+          Sign Up
         </h2>
 
         {message && (
