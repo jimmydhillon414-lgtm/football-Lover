@@ -76,7 +76,7 @@ export function SignUp() {
       <div className="absolute w-[400px] h-[400px] bg-green-500/20 rounded-full blur-[100px] top-[-100px] left-[-100px]" />
       <div className="absolute w-[400px] h-[400px] bg-blue-500/20 rounded-full blur-[100px] bottom-[-100px] right-[-100px]" />
      
-     <div onClick={() => router.push('/')} className="absolute z-50 top-4 right-4 text-white bg-green-500 rounded-full px-4 py-2 transition-all hover:bg-green-600 shadow-[0_0_15px_rgba(34,197,94,0.6)]">Home</div> 
+     <div onClick={() => router.push('/')} className="absolute z-50 top-4 right-4 text-white bg-green-500 rounded-full px-4 py-2 transition-all hover:bg-green-600 shadow-[0_0_15px_rgba(34,197,94,0.6)] select-none">Home</div> 
       <div className="relative z-10 p-8 w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Sign Up
