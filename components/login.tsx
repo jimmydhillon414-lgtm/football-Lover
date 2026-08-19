@@ -36,14 +36,14 @@ export function LoginComponent() {
 
   return (
     <div className="relative flex h-screen items-center justify-center overflow-hidden bg-[#060b13]">
-      {/* Background Glows */}
-      <div className="absolute top-[-100px] left-[-100px] h-[400px] w-[400px] rounded-full bg-green-500/20 blur-[100px]" />
-      <div className="absolute bottom-[-100px] right-[-100px] h-[400px] w-[400px] rounded-full bg-blue-500/20 blur-[100px]" />
+      {/* Background Glows (pointer-events-none prevents click blocking) */}
+      <div className="pointer-events-none absolute top-[-100px] left-[-100px] h-[400px] w-[400px] rounded-full bg-green-500/20 blur-[100px]" />
+      <div className="pointer-events-none absolute bottom-[-100px] right-[-100px] h-[400px] w-[400px] rounded-full bg-blue-500/20 blur-[100px]" />
 
-      {/* Home Button */}
+      {/* Home Button with z-[100] and pointer-events-auto */}
       <Link
         href="/"
-        className="absolute top-6 right-6 z-50 flex items-center gap-2 rounded-full bg-green-500/90 px-4 py-2 font-semibold text-black shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all hover:bg-green-400 cursor-pointer"
+        className="fixed top-6 right-6 z-[100] pointer-events-auto flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-all hover:bg-green-400 cursor-pointer"
       >
         <Home className="size-4" />
         <span>Home</span>
