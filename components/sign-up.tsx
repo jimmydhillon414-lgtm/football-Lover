@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient'; // Adjust path if your file is in another folder
+import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -75,8 +77,15 @@ export function SignUp() {
     <div className="flex justify-center items-center h-screen bg-[#060b13] relative overflow-hidden">
       <div className="absolute w-[400px] h-[400px] bg-green-500/20 rounded-full blur-[100px] top-[-100px] left-[-100px]" />
       <div className="absolute w-[400px] h-[400px] bg-blue-500/20 rounded-full blur-[100px] bottom-[-100px] right-[-100px]" />
-     
-     <div onClick={() => router.push('/')} className="absolute z-50 top-4 right-4 text-white bg-green-500 rounded-full px-4 py-2 transition-all hover:bg-green-600 shadow-[0_0_15px_rgba(34,197,94,0.6)] select-none">Home</div> 
+      
+      {/* Updated Home Button to Next.js <Link> */}
+      <Link 
+        href="/" 
+        className="absolute z-50 top-4 right-4 text-white bg-green-500 rounded-full px-4 py-2 transition-all hover:bg-green-600 shadow-[0_0_15px_rgba(34,197,94,0.6)] select-none cursor-pointer"
+      >
+        Home
+      </Link> 
+
       <div className="relative z-10 p-8 w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Sign Up
@@ -131,7 +140,7 @@ export function SignUp() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full p-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-black font-bold rounded-xl transition"
+            className="w-full p-3 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-black font-bold rounded-xl transition cursor-pointer"
           >
             {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
@@ -140,3 +149,5 @@ export function SignUp() {
     </div>
   );
 }
+
+export default SignUp;
