@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 
-export function LoginComponent() {
+export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,6 +27,17 @@ export function LoginComponent() {
         setMessage({ text: error.message, type: 'error' })
       } else {
         setMessage({ text: 'Logged in successfully!', type: 'success' })
+
+        setTimeout(() => {
+          if (onSuccess) onSuccess()
+          
+          // Redirect and scroll directly to the shop section
+          router.push('/#catalog')
+          const catalogSection = document.getElementById('catalog')
+          if (catalogSection) {
+            catalogSection.scrollIntoView({ behavior: 'smooth' })
+          }
+        }, 500)
       }
     } catch (err: any) {
       setMessage({ text: err.message || 'An unexpected error occurred.', type: 'error' })
