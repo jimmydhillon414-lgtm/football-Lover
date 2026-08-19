@@ -1,4 +1,4 @@
-// import { Truck, Wallet } from 'lucide-react'
+import { Truck, Wallet } from 'lucide-react'
 
 // export function AnnouncementBar() {
 //   const message = (
