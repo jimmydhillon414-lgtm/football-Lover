@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { LoginComponent } from '@/components/login'
 import { SignUp } from '@/components/sign-up'
 import { supabase } from '@/lib/supabaseClient'
-import SearchModal from '@/commponents/ui/SearchModal';
+import SearchModal from '@/components/ui/SearchModal';
 const NAV = [
   { label: 'Shop', href: '#catalog' },
   { label: 'Custom Lab', href: '#custom-lab' },
