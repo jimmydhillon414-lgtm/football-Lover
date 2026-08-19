@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { LoginComponent } from '@/components/login'
 import { SignUp } from '@/components/sign-up'
 import { supabase } from '@/lib/supabaseClient'
-
+import SearchModal from '@/commponents/ui/SearchModal';
 const NAV = [
   { label: 'Shop', href: '#catalog' },
   { label: 'Custom Lab', href: '#custom-lab' },
@@ -85,9 +85,10 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" aria-label="Search">
+          <SearchModal/>
+          {/* <Button variant="ghost" size="icon" aria-label="Search">
             <Search />
-          </Button>
+          </Button> */}
 
           {/* Render Profile icon if user is logged in, else show Login & Sign Up */}
           {user ? (
