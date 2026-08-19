@@ -57,9 +57,31 @@ const filteredProducts = ALL_PRODUCTS.filter((product) => {
               </div>
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-zinc-800">
                 <span className="text-lg font-bold">{product.price}</span>
-                <button className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition">
-                  View Item
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {filteredProducts.map((product) => (
+    <div
+      key={product.id}
+      className="bg-[#121212] border border-zinc-800 rounded-lg p-5 flex flex-col justify-between hover:border-zinc-700 transition"
+    >
+      <div>
+        <span className="text-xs text-green-400 uppercase tracking-wider font-semibold">
+          {product.category}
+        </span>
+        <h2 className="text-xl font-semibold mt-1 mb-2">{product.name}</h2>
+      </div>
+      <div className="flex items-center justify-between mt-4 pt-4 border-t border-zinc-800">
+        <span className="text-lg font-bold">{product.price}</span>
+        {/* ✅ Updated to Link component */}
+        <Link
+          href={`/products/${product.id}`}
+          className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition text-center"
+        >
+          View Item
+        </Link>
+      </div>
+    </div>
+  ))}
+</div>
               </div>
             </div>
           ))}
