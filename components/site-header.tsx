@@ -1,6 +1,6 @@
 'use client'
 
-import { Menu, Search, ShoppingBag, X } from 'lucide-react'
+import { Menu, Search, ShoppingBag, X, Home } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useCart } from '@/components/cart/cart-context'
@@ -119,10 +119,11 @@ export function SiteHeader() {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
           <button
             onClick={() => setIsSignUpOpen(false)}
-            className="fixed top-6 right-6 z-[10000] text-white/80 hover:text-white font-bold text-3xl transition bg-black/40 rounded-full w-10 h-10 flex items-center justify-center"
-            aria-label="Close Sign Up"
+            className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-all hover:bg-green-400 cursor-pointer"
+            aria-label="Return Home"
           >
-            ✕
+            <Home className="size-4" />
+            <span>Home</span>
           </button>
           <div className="w-full max-w-md my-auto">
             <SignUp />
@@ -136,10 +137,11 @@ export function SiteHeader() {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
           <button
             onClick={() => setIsLoginOpen(false)}
-            className="fixed top-6 right-6 z-[10000] text-white/80 hover:text-white font-bold text-3xl transition bg-black/40 rounded-full w-10 h-10 flex items-center justify-center"
-            aria-label="Close Login"
+            className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-all hover:bg-green-400 cursor-pointer"
+            aria-label="Return Home"
           >
-            ✕
+            <Home className="size-4" />
+            <span>Home</span>
           </button>
           <div className="w-full max-w-md my-auto">
             <LoginComponent />
