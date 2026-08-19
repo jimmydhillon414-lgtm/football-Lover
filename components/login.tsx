@@ -159,4 +159,4 @@ export function LoginComponent() {
   )
 }
 
-export default SignUp
+export default LoginComponent;
