@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-// Mock Data - Replace this with your actual database/products fetch logic
+// Mock Data
 const ALL_PRODUCTS = [
   { id: "1", name: "Pro Performance Grip Socks", category: "Grip Socks", price: "₹499" },
   { id: "2", name: "Customized Carbon Shin Guards", category: "Shin Guards", price: "₹1,299" },
@@ -11,18 +12,19 @@ const ALL_PRODUCTS = [
   { id: "4", name: "Anti-Slip Training Socks", category: "Grip Socks", price: "₹399" },
 ];
 
-export default function SearchPage() {
+// Inner component using useSearchParams
+function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 
-  // Filter products based on search query
-  const filteredProducts = ALL_PRODUCTS.filter((product) =>
-    product.name.toLowerCase().includes(query.toLowerCase()) ||
-    product.category.toLowerCase().includes(query.toLowerCase())
+  const filteredProducts = ALL_PRODUCTS.filter(
+    (product) =>
+      product.name.toLowerCase().includes(query.toLowerCase()) ||
+      product.category.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white px-6 py-12 max-w-7xl mx-auto">
+    <>
       <h1 className="text-3xl font-bold mb-2">
         Search Results for: <span className="text-green-400">"{query}"</span>
       </h1>
@@ -63,6 +65,17 @@ export default function SearchPage() {
           </Link>
         </div>
       )}
+    </>
+  );
+}
+
+// Main page component wrapped in Suspense boundary
+export default function SearchPage() {
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-white px-6 py-12 max-w-7xl mx-auto">
+      <Suspense fallback={<div className="text-zinc-400">Loading search results...</div>}>
+        <SearchResults />
+      </Suspense>
     </div>
   );
 }
