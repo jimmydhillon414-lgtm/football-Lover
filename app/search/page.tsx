@@ -1,0 +1,68 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+
+// Mock Data - Replace this with your actual database/products fetch logic
+const ALL_PRODUCTS = [
+  { id: "1", name: "Pro Performance Grip Socks", category: "Grip Socks", price: "₹499" },
+  { id: "2", name: "Customized Carbon Shin Guards", category: "Shin Guards", price: "₹1,299" },
+  { id: "3", name: "Turf Master Football Studs", category: "Studs", price: "₹2,499" },
+  { id: "4", name: "Anti-Slip Training Socks", category: "Grip Socks", price: "₹399" },
+];
+
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
+
+  // Filter products based on search query
+  const filteredProducts = ALL_PRODUCTS.filter((product) =>
+    product.name.toLowerCase().includes(query.toLowerCase()) ||
+    product.category.toLowerCase().includes(query.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-white px-6 py-12 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold mb-2">
+        Search Results for: <span className="text-green-400">"{query}"</span>
+      </h1>
+      <p className="text-zinc-400 mb-8">
+        Found {filteredProducts.length} product{filteredProducts.length === 1 ? "" : "s"}
+      </p>
+
+      {filteredProducts.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="bg-[#121212] border border-zinc-800 rounded-lg p-5 flex flex-col justify-between hover:border-zinc-700 transition"
+            >
+              <div>
+                <span className="text-xs text-green-400 uppercase tracking-wider font-semibold">
+                  {product.category}
+                </span>
+                <h2 className="text-xl font-semibold mt-1 mb-2">{product.name}</h2>
+              </div>
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-zinc-800">
+                <span className="text-lg font-bold">{product.price}</span>
+                <button className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition">
+                  View Item
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20 bg-[#121212] border border-zinc-800 rounded-xl">
+          <p className="text-lg text-zinc-400">No gear found matching your search.</p>
+          <Link
+            href="/"
+            className="inline-block mt-4 text-green-400 hover:underline font-medium"
+          >
+            Go back to homepage
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
