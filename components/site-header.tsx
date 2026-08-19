@@ -1,13 +1,15 @@
 'use client'
 
-import { Menu, Search, ShoppingBag, X, Home } from 'lucide-react'
+import { Menu, Search, ShoppingBag, X, Home, User } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import Link from 'next/link'
 import { useCart } from '@/components/cart/cart-context'
 import { Logo } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { LoginComponent } from '@/components/login'
 import { SignUp } from '@/components/sign-up'
+import { supabase } from '@/lib/supabaseClient'
 
 const NAV = [
   { label: 'Shop', href: '#catalog' },
@@ -22,13 +24,24 @@ export function SiteHeader() {
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isSignUpOpen, setIsSignUpOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<any>(null)
 
-  // Ensure portal only renders on client side
   useEffect(() => {
     setMounted(true)
+
+    // Check active user session
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+    })
+
+    // Listen for auth status changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
-  // Lock background scrolling when either modal is open
   useEffect(() => {
     if (isSignUpOpen || isLoginOpen) {
       document.body.style.overflow = 'hidden'
@@ -36,7 +49,6 @@ export function SiteHeader() {
       document.body.style.overflow = ''
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = ''
     }
@@ -77,25 +89,35 @@ export function SiteHeader() {
             <Search />
           </Button>
 
-          {/* Login Button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            aria-label="Login" 
-            onClick={() => { setIsLoginOpen(true); setIsSignUpOpen(false); }}
-          >
-            Login
-          </Button>
+          {/* Render Profile icon if user is logged in, else show Login & Sign Up */}
+          {user ? (
+            <Link href="/profile">
+              <Button variant="ghost" size="sm" className="flex items-center gap-2 font-semibold text-green-400">
+                <User className="size-4" />
+                <span>Account</span>
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                aria-label="Login" 
+                onClick={() => { setIsLoginOpen(true); setIsSignUpOpen(false); }}
+              >
+                Login
+              </Button>
 
-          {/* Sign Up Button */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            aria-label="Sign Up" 
-            onClick={() => { setIsSignUpOpen(true); setIsLoginOpen(false); }}
-          > 
-            Sign Up 
-          </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                aria-label="Sign Up" 
+                onClick={() => { setIsSignUpOpen(true); setIsLoginOpen(false); }}
+              > 
+                Sign Up 
+              </Button>
+            </>
+          )}
 
           <Button
             variant="ghost"
@@ -144,7 +166,7 @@ export function SiteHeader() {
             <span>Home</span>
           </button>
           <div className="w-full max-w-md my-auto">
-            <LoginComponent />
+            <LoginComponent onSuccess={() => setIsLoginOpen(false)} />
           </div>
         </div>,
         document.body
