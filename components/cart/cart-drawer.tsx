@@ -5,6 +5,7 @@ import {
   BadgeCheck,
   Banknote,
   CreditCard,
+  Loader2,
   Minus,
   Plus,
   ShoppingBag,
@@ -12,35 +13,140 @@ import {
   Truck,
   X,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useCart } from '@/components/cart/cart-context'
 import { Button } from '@/components/ui/button'
 import { formatINR } from '@/lib/products'
+import { supabase } from '@/lib/supabaseClient'
 
 const FREE_SHIP_THRESHOLD = 999
 
 type Step = 'cart' | 'checkout' | 'done'
 
 const PAYMENTS = [
+  { id: 'cod', label: 'Cash on Delivery', hint: 'Pay at doorstep', icon: Banknote },
   { id: 'upi', label: 'UPI', hint: 'GPay · Paytm · PhonePe', icon: Smartphone },
   { id: 'card', label: 'Card', hint: 'Credit / Debit', icon: CreditCard },
-  { id: 'cod', label: 'Cash on Delivery', hint: 'Pay at doorstep', icon: Banknote },
 ] as const
 
 export function CartDrawer() {
-  const { items, isOpen, close, subtotal, updateQty, removeItem, count } =
+  const { items, isOpen, close, subtotal, updateQty, removeItem, count, clearCart } =
     useCart()
+  const router = useRouter()
   const [step, setStep] = useState<Step>('cart')
-  const [payment, setPayment] = useState<string>('upi')
+  const [payment, setPayment] = useState<string>('cod')
+
+  // Form states
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [pincode, setPincode] = useState('')
+
+  const [loading, setLoading] = useState(false)
+  const [orderId, setOrderId] = useState('')
 
   const remaining = Math.max(0, FREE_SHIP_THRESHOLD - subtotal)
   const progress = Math.min(100, (subtotal / FREE_SHIP_THRESHOLD) * 100)
   const shipping = subtotal >= FREE_SHIP_THRESHOLD || subtotal === 0 ? 0 : 79
   const total = subtotal + shipping
 
+  // Prefill form from user account/saved address if available
+  useEffect(() => {
+    async function loadAddress() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        if (user.user_metadata?.full_name) {
+          setFullName(user.user_metadata.full_name)
+        }
+        
+        const { data: addresses } = await supabase
+          .from('user_addresses')
+          .select('*')
+          .eq('user_id', user.id)
+          .limit(1)
+
+        if (addresses && addresses.length > 0) {
+          const addr = addresses[0]
+          setAddress(addr.street_address || '')
+          setCity(addr.city || '')
+          setPincode(addr.pincode || '')
+          if (addr.phone) setPhone(addr.phone)
+        }
+      }
+    }
+
+    if (isOpen) {
+      loadAddress()
+    }
+  }, [isOpen])
+
   const handleClose = () => {
     close()
     setTimeout(() => setStep('cart'), 300)
+  }
+
+  const handlePlaceOrder = async () => {
+    if (!fullName || !phone || !address || !city || !pincode) {
+      alert('Please fill in all shipping details before placing the order.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      const generatedOrderId = `FL-${Math.floor(100000 + Math.random() * 900000)}`
+
+      // 1. Save order into Supabase Database
+      const { error: dbError } = await supabase.from('orders').insert([
+        {
+          order_number: generatedOrderId,
+          user_id: user ? user.id : null,
+          customer_name: fullName,
+          customer_email: user?.email || 'N/A',
+          customer_phone: phone,
+          shipping_address: `${address}, ${city}`,
+          pincode: pincode,
+          items: items,
+          total_amount: total,
+          payment_method: payment.toUpperCase(),
+          status: 'Pending',
+        },
+      ])
+
+      if (dbError) {
+        console.error('Database save error:', dbError)
+      }
+
+      // 2. Post order directly to Google Sheets API
+      await fetch('/api/place-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_number: generatedOrderId,
+          customer_name: fullName,
+          customer_email: user?.email || 'N/A',
+          customer_phone: phone,
+          street_address: address,
+          city: city,
+          pincode: pincode,
+          items: items,
+          total_amount: total,
+          payment_method: payment.toUpperCase(),
+        }),
+      })
+
+      // 3. Complete order
+      setOrderId(generatedOrderId)
+      if (clearCart) clearCart()
+      setStep('done')
+    } catch (err: any) {
+      alert(err.message || 'Error processing order. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -209,16 +315,38 @@ export function CartDrawer() {
               <>
                 <div className="flex-1 overflow-y-auto px-5 py-4">
                   <div className="grid grid-cols-2 gap-3">
-                    <Field label="Full Name" placeholder="Rohan Sharma" />
-                    <Field label="Phone" placeholder="+91 98765 43210" />
+                    <Field
+                      label="Full Name"
+                      placeholder="Rohan Sharma"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                    />
+                    <Field
+                      label="Phone"
+                      placeholder="+91 98765 43210"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
                     <div className="col-span-2">
                       <Field
                         label="Delivery Address"
                         placeholder="Flat, street, area"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
                       />
                     </div>
-                    <Field label="City" placeholder="Bengaluru" />
-                    <Field label="PIN Code" placeholder="560001" />
+                    <Field
+                      label="City"
+                      placeholder="Bengaluru"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                    <Field
+                      label="PIN Code"
+                      placeholder="560001"
+                      value={pincode}
+                      onChange={(e) => setPincode(e.target.value)}
+                    />
                   </div>
 
                   <p className="mb-2 mt-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -259,12 +387,19 @@ export function CartDrawer() {
                   subtotal={subtotal}
                   shipping={shipping}
                   total={total}
+                  disabled={loading}
                   cta={
-                    payment === 'cod'
-                      ? `Place COD Order · ${formatINR(total)}`
-                      : `Pay ${formatINR(total)}`
+                    loading ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 className="size-4 animate-spin" /> Processing...
+                      </span>
+                    ) : payment === 'cod' ? (
+                      `Place COD Order · ${formatINR(total)}`
+                    ) : (
+                      `Pay ${formatINR(total)}`
+                    )
                   }
-                  onCta={() => setStep('done')}
+                  onCta={handlePlaceOrder}
                   secondary={{ label: 'Back to bag', onClick: () => setStep('cart') }}
                 />
               </>
@@ -284,16 +419,31 @@ export function CartDrawer() {
                 <h3 className="font-display text-2xl italic">
                   YOU&apos;RE MATCH-READY!
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  Your order is confirmed. Track your express delivery on WhatsApp
-                  &amp; SMS. Pan-India shipping is on the way.
+                <p className="text-xs font-semibold text-primary">
+                  Order ID: {orderId}
                 </p>
-                <Button
-                  onClick={handleClose}
-                  className="mt-2 bg-primary font-bold text-primary-foreground hover:bg-primary/90"
-                >
-                  Continue Shopping
-                </Button>
+                <p className="text-sm text-muted-foreground">
+                  Your order has been recorded and synced to our delivery system.
+                  Track your express delivery or view details in your account profile.
+                </p>
+                <div className="flex flex-col gap-2 w-full mt-2">
+                  <Button
+                    onClick={() => {
+                      handleClose()
+                      router.push('/profile')
+                    }}
+                    variant="outline"
+                    className="w-full font-bold"
+                  >
+                    View Order in Profile
+                  </Button>
+                  <Button
+                    onClick={handleClose}
+                    className="w-full bg-primary font-bold text-primary-foreground hover:bg-primary/90"
+                  >
+                    Continue Shopping
+                  </Button>
+                </div>
               </div>
             )}
           </motion.aside>
@@ -306,9 +456,13 @@ export function CartDrawer() {
 function Field({
   label,
   placeholder,
+  value,
+  onChange,
 }: {
   label: string
   placeholder: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) {
   return (
     <label className="block">
@@ -316,6 +470,8 @@ function Field({
         {label}
       </span>
       <input
+        value={value}
+        onChange={onChange}
         placeholder={placeholder}
         className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none transition-colors focus:border-primary"
       />
@@ -329,13 +485,15 @@ function CartFooter({
   total,
   cta,
   onCta,
+  disabled,
   secondary,
 }: {
   subtotal: number
   shipping: number
   total: number
-  cta: string
+  cta: React.ReactNode
   onCta: () => void
+  disabled?: boolean
   secondary?: { label: string; onClick: () => void }
 }) {
   return (
@@ -362,8 +520,9 @@ function CartFooter({
       </dl>
       <Button
         size="lg"
+        disabled={disabled}
         onClick={onCta}
-        className="mt-4 h-12 w-full bg-primary text-base font-bold text-primary-foreground hover:bg-primary/90"
+        className="mt-4 h-12 w-full bg-primary text-base font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
       >
         {cta}
       </Button>
