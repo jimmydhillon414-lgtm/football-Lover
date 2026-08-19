@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Home } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 
-export function SignUp() {
+export function LoginComponent() {
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
