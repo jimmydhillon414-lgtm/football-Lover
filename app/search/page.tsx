@@ -17,12 +17,22 @@ function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
 
-  const filteredProducts = ALL_PRODUCTS.filter(
-    (product) =>
-      product.name.toLowerCase().includes(query.toLowerCase()) ||
-      product.category.toLowerCase().includes(query.toLowerCase())
-  );
+  // Split user query into individual clean words
+const searchWords = query
+  .toLowerCase()
+  .trim()
+  .split(/\s+/)
+  .filter(Boolean);
 
+const filteredProducts = ALL_PRODUCTS.filter((product) => {
+  const name = product.name.toLowerCase();
+  const category = product.category.toLowerCase();
+
+  // Return true if ANY search word is found in name or category
+  return searchWords.some(
+    (word) => name.includes(word) || category.includes(word)
+  );
+});
   return (
     <>
       <h1 className="text-3xl font-bold mb-2">
