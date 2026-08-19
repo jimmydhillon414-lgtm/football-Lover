@@ -48,7 +48,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary"
           >
             <span className="size-1.5 rounded-full bg-primary" />
-            फुटबॉल लवर्स
+           
           </motion.span>
 
           <motion.h1
@@ -63,9 +63,7 @@ export function Hero() {
             variants={item}
             className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            From Mumbai maidans to Kolkata academies and Kerala turf leagues —
-            grip socks, custom shin guards and studs built to survive the
-            grind of the local game.
+            
           </motion.p>
 
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
