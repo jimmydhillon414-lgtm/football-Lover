@@ -28,7 +28,7 @@ export function LoginComponent() {
       }
     } catch (err: any) {
       setMessage({ text: err.message || 'An unexpected error occurred.', type: 'error' })
-    } finale {
+    } finally {
       setLoading(false)
     }
   }
