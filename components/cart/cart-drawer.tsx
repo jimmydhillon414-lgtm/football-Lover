@@ -55,12 +55,15 @@ export function CartDrawer() {
   // Prefill form from user account/saved address if available
   useEffect(() => {
     async function loadAddress() {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
       if (user) {
         if (user.user_metadata?.full_name) {
           setFullName(user.user_metadata.full_name)
         }
-        
+
         const { data: addresses } = await supabase
           .from('user_addresses')
           .select('*')
@@ -87,16 +90,35 @@ export function CartDrawer() {
     setTimeout(() => setStep('cart'), 300)
   }
 
-  const handlePlaceOrder = async () => {
-    if (!fullName || !phone || !address || !city || !pincode) {
+  const validateForm = () => {
+    if (!fullName.trim() || !phone.trim() || !address.trim() || !city.trim() || !pincode.trim()) {
       alert('Please fill in all shipping details before placing the order.')
-      return
+      return false
     }
+
+    const cleanPhone = phone.replace(/\D/g, '')
+    if (cleanPhone.length < 10) {
+      alert('Please enter a valid 10-digit phone number.')
+      return false
+    }
+
+    if (!/^\d{6}$/.test(pincode.trim())) {
+      alert('Please enter a valid 6-digit PIN code.')
+      return false
+    }
+
+    return true
+  }
+
+  const handlePlaceOrder = async () => {
+    if (!validateForm()) return
 
     setLoading(true)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       const generatedOrderId = `FL-${Math.floor(100000 + Math.random() * 900000)}`
 
       // 1. Save order into Supabase Database
@@ -104,11 +126,11 @@ export function CartDrawer() {
         {
           order_number: generatedOrderId,
           user_id: user ? user.id : null,
-          customer_name: fullName,
+          customer_name: fullName.trim(),
           customer_email: user?.email || 'N/A',
-          customer_phone: phone,
-          shipping_address: `${address}, ${city}`,
-          pincode: pincode,
+          customer_phone: phone.trim(),
+          shipping_address: `${address.trim()}, ${city.trim()}`,
+          pincode: pincode.trim(),
           items: items,
           total_amount: total,
           payment_method: payment.toUpperCase(),
@@ -117,28 +139,32 @@ export function CartDrawer() {
       ])
 
       if (dbError) {
-        console.error('Database save error:', dbError)
+        throw new Error(`Failed to save order: ${dbError.message}`)
       }
 
-      // 2. Post order directly to Google Sheets API
-      await fetch('/api/place-order', {
+      // 2. Post order to sync endpoint / Google Sheets API
+      const res = await fetch('/api/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           order_number: generatedOrderId,
-          customer_name: fullName,
+          customer_name: fullName.trim(),
           customer_email: user?.email || 'N/A',
-          customer_phone: phone,
-          street_address: address,
-          city: city,
-          pincode: pincode,
+          customer_phone: phone.trim(),
+          street_address: address.trim(),
+          city: city.trim(),
+          pincode: pincode.trim(),
           items: items,
           total_amount: total,
           payment_method: payment.toUpperCase(),
         }),
       })
 
-      // 3. Complete order
+      if (!res.ok) {
+        console.warn('Google Sheets sync endpoint returned non-200 status.')
+      }
+
+      // 3. Complete order state
       setOrderId(generatedOrderId)
       if (clearCart) clearCart()
       setStep('done')
@@ -167,9 +193,10 @@ export function CartDrawer() {
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col border-l border-border bg-card"
             role="dialog"
-            aria-label="Shopping cart"
+            aria-modal="true"
+            aria-label="Shopping cart drawer"
           >
-            {/* header */}
+            {/* Header */}
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
               <h2 className="inline-flex items-center gap-2 font-display text-xl italic">
                 <ShoppingBag className="size-5 text-primary" />
@@ -182,14 +209,14 @@ export function CartDrawer() {
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label="Close cart"
+                aria-label="Close cart drawer"
                 onClick={handleClose}
               >
-                <X />
+                <X className="size-5" />
               </Button>
             </div>
 
-            {/* empty */}
+            {/* Empty Cart */}
             {items.length === 0 && step !== 'done' && (
               <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
                 <ShoppingBag className="size-10 text-muted-foreground" />
@@ -206,7 +233,7 @@ export function CartDrawer() {
               </div>
             )}
 
-            {/* cart step */}
+            {/* Cart Step */}
             {items.length > 0 && step === 'cart' && (
               <>
                 <div className="border-b border-border px-5 py-3">
@@ -310,7 +337,7 @@ export function CartDrawer() {
               </>
             )}
 
-            {/* checkout step */}
+            {/* Checkout Step */}
             {items.length > 0 && step === 'checkout' && (
               <>
                 <div className="flex-1 overflow-y-auto px-5 py-4">
@@ -405,7 +432,7 @@ export function CartDrawer() {
               </>
             )}
 
-            {/* done step */}
+            {/* Done Step */}
             {step === 'done' && (
               <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
                 <motion.div
@@ -426,7 +453,7 @@ export function CartDrawer() {
                   Your order has been recorded and synced to our delivery system.
                   Track your express delivery or view details in your account profile.
                 </p>
-                <div className="flex flex-col gap-2 w-full mt-2">
+                <div className="mt-2 flex w-full flex-col gap-2">
                   <Button
                     onClick={() => {
                       handleClose()
