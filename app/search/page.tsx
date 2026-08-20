@@ -5,11 +5,40 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/components/cart/cart-context";
 
+// Product list with actual image paths
 const ALL_PRODUCTS = [
-  { id: "1", name: "Pro Performance Grip Socks", category: "Grip Socks", price: 499, displayPrice: "₹499" },
-  { id: "2", name: "Customized Carbon Shin Guards", category: "Shin Guards", price: 1299, displayPrice: "₹1,299" },
-  { id: "3", name: "Turf Master Football Studs", category: "Studs", price: 2499, displayPrice: "₹2,499" },
-  { id: "4", name: "Anti-Slip Training Socks", category: "Grip Socks", price: 399, displayPrice: "₹399" },
+  {
+    id: "1",
+    name: "Pro Performance Grip Socks",
+    category: "Grip Socks",
+    price: 499,
+    displayPrice: "₹499",
+    image: "https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?w=300&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "2",
+    name: "Customized Carbon Shin Guards",
+    category: "Shin Guards",
+    price: 1299,
+    displayPrice: "₹1,299",
+    image: "https://images.unsplash.com/photo-1511886929837-354d827aae26?w=300&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "3",
+    name: "Turf Master Football Studs",
+    category: "Studs",
+    price: 2499,
+    displayPrice: "₹2,499",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&auto=format&fit=crop&q=80",
+  },
+  {
+    id: "4",
+    name: "Anti-Slip Training Socks",
+    category: "Grip Socks",
+    price: 399,
+    displayPrice: "₹399",
+    image: "https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?w=300&auto=format&fit=crop&q=80",
+  },
 ];
 
 function SearchResults() {
@@ -33,19 +62,13 @@ function SearchResults() {
   });
 
   const handleBuy = (product: typeof ALL_PRODUCTS[0]) => {
-    console.log("BUY BUTTON CLICKED FOR:", product.name);
-    try {
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: "/placeholder.svg",
-      });
-      open();
-      console.log("Cart drawer open requested!");
-    } catch (error) {
-      console.error("Cart action failed:", error);
-    }
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image, // Dynamic product image linked
+    });
+    open();
   };
 
   return (
