@@ -33,13 +33,19 @@ function SearchResults() {
   });
 
   const handleBuy = (product: typeof ALL_PRODUCTS[0]) => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: "/placeholder.svg",
-    });
-    open(); // Guarantees the side drawer opens immediately
+    console.log("BUY BUTTON CLICKED FOR:", product.name);
+    try {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: "/placeholder.svg",
+      });
+      open();
+      console.log("Cart drawer open requested!");
+    } catch (error) {
+      console.error("Cart action failed:", error);
+    }
   };
 
   return (
@@ -56,7 +62,7 @@ function SearchResults() {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-[#121212] border border-zinc-800 rounded-lg p-5 flex flex-col justify-between hover:border-zinc-700 transition"
+              className="bg-[#121212] border border-zinc-800 rounded-lg p-5 flex flex-col justify-between hover:border-zinc-700 transition relative z-10"
             >
               <div>
                 <span className="text-xs text-green-400 uppercase tracking-wider font-semibold">
@@ -67,13 +73,13 @@ function SearchResults() {
                 </h2>
               </div>
 
-              <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
+              <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800 relative z-20">
                 <span className="text-lg font-bold text-white">{product.displayPrice}</span>
                 
                 <button
                   type="button"
                   onClick={() => handleBuy(product)}
-                  className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition text-center shrink-0 cursor-pointer"
+                  className="relative z-50 pointer-events-auto bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition text-center shrink-0 cursor-pointer"
                 >
                   Buy Now
                 </button>
@@ -98,7 +104,7 @@ function SearchResults() {
 
 export default function SearchPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white px-6 py-12 max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0a] text-white px-6 py-12 max-w-7xl mx-auto relative z-0">
       <Suspense fallback={<div className="text-zinc-400">Loading search results...</div>}>
         <SearchResults />
       </Suspense>
