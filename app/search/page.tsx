@@ -1,10 +1,53 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Search, X } from "lucide-react";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
+
+function SearchBar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  const handleClear = () => {
+    setQuery("");
+    router.push("/search");
+  };
+
+  return (
+    <form onSubmit={handleSearch} className="relative w-full max-w-xl mb-8">
+      <div className="relative flex items-center group">
+        <Search className="absolute left-4 size-4 text-zinc-400 group-focus-within:text-green-400 transition-colors pointer-events-none" />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search grip socks, shin guards, studs..."
+          className="w-full pl-11 pr-10 py-3 bg-zinc-900/80 backdrop-blur-md border border-zinc-800 text-white placeholder-zinc-500 text-sm rounded-xl outline-none transition-all duration-300 focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20 focus:bg-zinc-900 shadow-inner"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-3 p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+          >
+            <X className="size-4" />
+          </button>
+        )}
+      </div>
+    </form>
+  );
+}
 
 function SearchResults() {
   const searchParams = useSearchParams();
@@ -27,9 +70,16 @@ function SearchResults() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-2">
-        Search Results for: <span className="text-green-400">"{query}"</span>
-      </h1>
+      <SearchBar />
+
+      {query ? (
+        <h1 className="text-3xl font-bold mb-2">
+          Search Results for: <span className="text-green-400">"{query}"</span>
+        </h1>
+      ) : (
+        <h1 className="text-3xl font-bold mb-2">All Products</h1>
+      )}
+
       <p className="text-zinc-400 mb-8">
         Found {filteredProducts.length} product{filteredProducts.length === 1 ? "" : "s"}
       </p>
