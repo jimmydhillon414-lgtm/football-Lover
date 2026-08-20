@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/components/cart/cart-context";
 
-// Mock Data (Price ko number mein change kiya hai addItem function ke liye)
 const ALL_PRODUCTS = [
   { id: "1", name: "Pro Performance Grip Socks", category: "Grip Socks", price: 499, displayPrice: "₹499" },
   { id: "2", name: "Customized Carbon Shin Guards", category: "Shin Guards", price: 1299, displayPrice: "₹1,299" },
@@ -16,9 +15,8 @@ const ALL_PRODUCTS = [
 function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const { addItem } = useCart();
+  const { addItem, open } = useCart();
 
-  // Split user query into individual clean words for smart search
   const searchWords = query
     .toLowerCase()
     .trim()
@@ -33,6 +31,16 @@ function SearchResults() {
       (word) => name.includes(word) || category.includes(word)
     );
   });
+
+  const handleBuy = (product: typeof ALL_PRODUCTS[0]) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: "/placeholder.svg",
+    });
+    open(); // Guarantees the side drawer opens immediately
+  };
 
   return (
     <>
@@ -62,18 +70,10 @@ function SearchResults() {
               <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
                 <span className="text-lg font-bold text-white">{product.displayPrice}</span>
                 
-                {/* Fixed: Link replaced with addItem trigger */}
                 <button
                   type="button"
-                  onClick={() =>
-                    addItem({
-                      id: product.id,
-                      name: product.name,
-                      price: product.price,
-                      image: "/placeholder.svg", // Ya product.image agar available ho
-                    })
-                  }
-                  className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition text-center shrink-0"
+                  onClick={() => handleBuy(product)}
+                  className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition text-center shrink-0 cursor-pointer"
                 >
                   Buy Now
                 </button>
