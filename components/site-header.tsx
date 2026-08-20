@@ -135,21 +135,20 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* SignUp Modal with Dynamic AI Background */}
+      {/* SignUp Modal with Pure & Vibrant AI Background */}
       {mounted && isSignUpOpen && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
-          <div className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/20 overflow-y-auto p-4">
+          <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
             <img
               src="/images/login-bg.jpg.jpg"
               alt="Football action kick background"
-              className="size-full object-cover object-center opacity-80"
+              className="size-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-[#0a0a0a]/80" />
           </div>
 
           <button
             onClick={() => setIsSignUpOpen(false)}
-            className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-all hover:bg-green-400 cursor-pointer"
+            className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_20px_rgba(34,197,94,0.8)] transition-all hover:bg-green-400 cursor-pointer"
             aria-label="Return Home"
           >
             <Home className="size-4" />
@@ -162,21 +161,20 @@ export function SiteHeader() {
         document.body
       )}
 
-      {/* Login Modal with Dynamic AI Background */}
+      {/* Login Modal with Pure & Vibrant AI Background */}
       {mounted && isLoginOpen && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md overflow-y-auto p-4">
-          <div className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/20 overflow-y-auto p-4">
+          <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
             <img
               src="/images/login-bg.jpg.jpg"
               alt="Football action kick background"
-              className="size-full object-cover object-center opacity-40"
+              className="size-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-[#0a0a0a]/80" />
           </div>
 
           <button
             onClick={() => setIsLoginOpen(false)}
-            className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_15px_rgba(34,197,94,0.6)] transition-all hover:bg-green-400 cursor-pointer"
+            className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-full bg-green-500 px-4 py-2 font-semibold text-black shadow-[0_0_20px_rgba(34,197,94,0.8)] transition-all hover:bg-green-400 cursor-pointer"
             aria-label="Return Home"
           >
             <Home className="size-4" />
