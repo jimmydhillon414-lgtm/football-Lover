@@ -50,35 +50,7 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
         
-        {/* Glowing Neon Search Bar */}
-        <motion.div 
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 flex justify-center lg:justify-start"
-        >
-          <form onSubmit={handleSearch} className="relative w-full max-w-md">
-            <div className="relative flex items-center group">
-              <Search className="absolute left-4 size-4 text-zinc-400 group-focus-within:text-primary transition-colors pointer-events-none" />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search for grip socks, shin guards, studs..."
-                className="w-full pl-11 pr-10 py-3 bg-black/60 backdrop-blur-xl border border-white/15 text-white placeholder-zinc-400 text-sm rounded-full outline-none transition-all duration-300 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-[0_0_25px_rgba(34,197,94,0.3)] shadow-2xl"
-              />
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => setQuery('')}
-                  className="absolute right-3.5 p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition"
-                >
-                  <X className="size-4" />
-                </button>
-              )}
-            </div>
-          </form>
-        </motion.div>
+        
 
         <motion.div
           variants={container}
