@@ -2,12 +2,15 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { Eye, EyeOff } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 
 export function SignUp() {
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null)
 
@@ -101,26 +104,54 @@ export function SignUp() {
           <label className="mb-2 block text-sm font-medium text-white/70">
             Password
           </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/5 p-3 text-white outline-none transition focus:border-green-500"
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-xl border border-white/10 bg-white/5 p-3 pr-11 text-white outline-none transition focus:border-green-500"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/60 hover:text-white transition-colors cursor-pointer"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? (
+                <EyeOff className="size-5 text-green-400" />
+              ) : (
+                <Eye className="size-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         <div className="mb-6">
           <label className="mb-2 block text-sm font-medium text-white/70">
             Confirm Password
           </label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/5 p-3 text-white outline-none transition focus:border-green-500"
-            required
-          />
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full rounded-xl border border-white/10 bg-white/5 p-3 pr-11 text-white outline-none transition focus:border-green-500"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/60 hover:text-white transition-colors cursor-pointer"
+              aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="size-5 text-green-400" />
+              ) : (
+                <Eye className="size-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         <button
