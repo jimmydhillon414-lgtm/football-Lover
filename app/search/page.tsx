@@ -3,18 +3,20 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useCart } from "@/components/cart/cart-context";
 
-// Mock Data
+// Mock Data (Price ko number mein change kiya hai addItem function ke liye)
 const ALL_PRODUCTS = [
-  { id: "1", name: "Pro Performance Grip Socks", category: "Grip Socks", price: "₹499" },
-  { id: "2", name: "Customized Carbon Shin Guards", category: "Shin Guards", price: "₹1,299" },
-  { id: "3", name: "Turf Master Football Studs", category: "Studs", price: "₹2,499" },
-  { id: "4", name: "Anti-Slip Training Socks", category: "Grip Socks", price: "₹399" },
+  { id: "1", name: "Pro Performance Grip Socks", category: "Grip Socks", price: 499, displayPrice: "₹499" },
+  { id: "2", name: "Customized Carbon Shin Guards", category: "Shin Guards", price: 1299, displayPrice: "₹1,299" },
+  { id: "3", name: "Turf Master Football Studs", category: "Studs", price: 2499, displayPrice: "₹2,499" },
+  { id: "4", name: "Anti-Slip Training Socks", category: "Grip Socks", price: 399, displayPrice: "₹399" },
 ];
 
 function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
+  const { addItem } = useCart();
 
   // Split user query into individual clean words for smart search
   const searchWords = query
@@ -58,14 +60,23 @@ function SearchResults() {
               </div>
 
               <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
-                <span className="text-lg font-bold text-white">{product.price}</span>
-                {/* Redirects directly to place-order route with product id */}
-                <Link
-                  href={`/place-order?productId=${product.id}`}
+                <span className="text-lg font-bold text-white">{product.displayPrice}</span>
+                
+                {/* Fixed: Link replaced with addItem trigger */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    addItem({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: "/placeholder.svg", // Ya product.image agar available ho
+                    })
+                  }
                   className="bg-green-500 hover:bg-green-600 text-black font-semibold text-sm px-4 py-2 rounded-md transition text-center shrink-0"
                 >
                   Buy Now
-                </Link>
+                </button>
               </div>
             </div>
           ))}
