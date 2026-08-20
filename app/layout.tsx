@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Anton, Inter } from 'next/font/google'
 import { CartProvider } from '@/components/cart/cart-context'
+import { CartDrawer } from '@/components/cart/cart-drawer'
 import './globals.css'
 
 const inter = Inter({
@@ -37,7 +38,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${inter.variable} ${anton.variable} bg-background`}>
       <body className="font-sans antialiased">
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          {children}
+          <CartDrawer />
+        </CartProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
