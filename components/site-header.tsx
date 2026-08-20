@@ -142,7 +142,7 @@ export function SiteHeader() {
             <img
               src="/images/login-bg.jpg.jpg"
               alt="Football action kick background"
-              className="size-full object-cover object-center opacity-40"
+              className="size-full object-cover object-center opacity-80"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-[#0a0a0a]/80" />
           </div>
