@@ -3,8 +3,8 @@
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { PRODUCTS } from "@/lib/products";
-import { ProductCard } from "@/components/product-card"; // Reusing your existing ProductCard component
+import { products } from "@/lib/products";
+import { ProductCard } from "@/components/product-card";
 
 function SearchResults() {
   const searchParams = useSearchParams();
@@ -16,8 +16,7 @@ function SearchResults() {
     .split(/\s+/)
     .filter(Boolean);
 
-  // Filters the main products database using name and category
-  const filteredProducts = PRODUCTS.filter((product) => {
+  const filteredProducts = products.filter((product) => {
     const name = product.name.toLowerCase();
     const category = product.category.toLowerCase();
 
