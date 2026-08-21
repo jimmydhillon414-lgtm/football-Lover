@@ -75,33 +75,33 @@ export function SignUp() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0d1520] p-8 shadow-2xl">
-      <h2 className="mb-6 text-center text-3xl font-bold text-white">
+    <div className="w-full max-w-md rounded-2xl border border-white/20 bg-black/40 backdrop-blur-xl p-8 shadow-2xl shadow-black/80">
+      <h2 className="mb-6 text-center text-3xl font-bold text-white tracking-wide">
         Sign Up
       </h2>
 
       {message && (
-        <div className={`mb-4 rounded-xl p-4 text-sm font-medium ${message.type === 'success' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+        <div className={`mb-4 rounded-xl p-4 text-sm font-medium backdrop-blur-md ${message.type === 'success' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
           {message.text}
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-white/70">
+          <label className="mb-2 block text-sm font-medium text-white/80">
             Email / Mobile Number
           </label>
           <input
             type="text"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/5 p-3 text-white outline-none transition focus:border-green-500"
+            className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
             required
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-white/70">
+          <label className="mb-2 block text-sm font-medium text-white/80">
             Password
           </label>
           <div className="relative">
@@ -109,7 +109,7 @@ export function SignUp() {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 p-3 pr-11 text-white outline-none transition focus:border-green-500"
+              className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 pr-11 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
               required
             />
             <button
@@ -128,7 +128,7 @@ export function SignUp() {
         </div>
 
         <div className="mb-6">
-          <label className="mb-2 block text-sm font-medium text-white/70">
+          <label className="mb-2 block text-sm font-medium text-white/80">
             Confirm Password
           </label>
           <div className="relative">
@@ -136,7 +136,7 @@ export function SignUp() {
               type={showConfirmPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 p-3 pr-11 text-white outline-none transition focus:border-green-500"
+              className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 pr-11 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
               required
             />
             <button
@@ -157,7 +157,7 @@ export function SignUp() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl bg-green-500 p-3 font-bold text-black transition hover:bg-green-400 disabled:bg-gray-600 cursor-pointer"
+          className="w-full rounded-xl bg-green-500 p-3 font-bold text-black shadow-[0_0_15px_rgba(34,197,94,0.4)] transition hover:bg-green-400 disabled:bg-gray-600 cursor-pointer"
         >
           {loading ? 'Signing Up...' : 'Sign Up'}
         </button>
