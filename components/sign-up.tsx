@@ -75,7 +75,7 @@ export function SignUp() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-white/20 bg-black/40 backdrop-blur-xl p-8 shadow-2xl shadow-black/80">
+    <div className="w-full max-w-md rounded-2xl border border-white/20 bg-black/15 backdrop-blur-md p-8 shadow-2xl shadow-black/90">
       <h2 className="mb-6 text-center text-3xl font-bold text-white tracking-wide">
         Sign Up
       </h2>
