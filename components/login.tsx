@@ -48,7 +48,7 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
   }
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-white/20 bg-black/40 backdrop-blur-xl p-8 shadow-2xl shadow-black/80">
+    <div className="w-full max-w-md rounded-2xl border border-white/20 bg-black/15 backdrop-blur-md p-8 shadow-2xl shadow-black/90">
       <h2 className="mb-6 text-center text-3xl font-bold text-white tracking-wide">Login</h2>
 
       {message && (
@@ -66,7 +66,7 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
+            className="w-full rounded-xl border border-white/20 bg-black/20 backdrop-blur-sm p-3 text-white outline-none transition focus:border-green-500 focus:bg-black/40 placeholder-zinc-400"
             required
           />
         </div>
