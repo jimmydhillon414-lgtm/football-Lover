@@ -95,7 +95,7 @@ export function SignUp() {
             type="text"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
+            className="w-full rounded-xl border border-white/20 bg-black/20 backdrop-blur-sm p-3 text-white outline-none transition focus:border-green-500 focus:bg-black/40 placeholder-zinc-400"
             required
           />
         </div>
