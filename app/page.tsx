@@ -1,4 +1,4 @@
-import { AnnouncementBar } from '@/components/announcement-bar'
+
 import { Bundles } from '@/components/bundles'
 import { CartDrawer } from '@/components/cart/cart-drawer'
 import { CustomLab } from '@/components/custom-lab'
