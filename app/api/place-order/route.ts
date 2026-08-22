@@ -4,7 +4,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    // 1. Google Web App URL with fallback
+    // 1. Google Web App URL
     const GOOGLE_SCRIPT_URL =
       process.env.GOOGLE_SHEETS_SCRIPT_URL ||
       'https://script.google.com/macros/s/AKfycbyqRRg9ORN0Rz_XMVsF7xC3kpz31RdiiVfSCb6g_2thzw2cu8kIv7UT5wgZ5LSe-Nfd/exec'
