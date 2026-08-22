@@ -5,8 +5,12 @@ import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 
-export function SignUp() {
-  const [identifier, setIdentifier] = useState('')
+interface SignUpProps {
+  onSwitchToLogin?: () => void
+}
+
+export function SignUp({ onSwitchToLogin }: SignUpProps) {
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -18,54 +22,23 @@ export function SignUp() {
     e.preventDefault()
     setMessage(null)
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    const phoneRegex = /^\d{10}$/
-
-    const isEmail = emailRegex.test(identifier)
-    const isPhone = phoneRegex.test(identifier)
-
-    if (!isEmail && !isPhone) {
-      setMessage({ text: 'Please enter a valid email or 10-digit mobile number.', type: 'error' })
-      return
-    }
-
-    if (password.length < 8) {
-      setMessage({ text: 'Password must be at least 8 characters long.', type: 'error' })
-      return
-    }
-
     if (password !== confirmPassword) {
-      setMessage({ text: 'Password and confirm password do not match.', type: 'error' })
+      setMessage({ text: 'Passwords do not match.', type: 'error' })
       return
     }
 
     setLoading(true)
 
     try {
-      let error
-
-      if (isEmail) {
-        const res = await supabase.auth.signUp({
-          email: identifier,
-          password: password,
-        })
-        error = res.error
-      } else {
-        const formattedPhone = identifier.startsWith('+') ? identifier : `+${identifier}`
-        const res = await supabase.auth.signUp({
-          phone: formattedPhone,
-          password: password,
-        })
-        error = res.error
-      }
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
 
       if (error) {
         setMessage({ text: error.message, type: 'error' })
       } else {
-        setMessage({ text: 'Registration successful! Check your inbox/SMS for verification.', type: 'success' })
-        setIdentifier('')
-        setPassword('')
-        setConfirmPassword('')
+        setMessage({ text: 'Account created successfully! Please check your email.', type: 'success' })
       }
     } catch (err: any) {
       setMessage({ text: err.message || 'An unexpected error occurred.', type: 'error' })
@@ -76,9 +49,7 @@ export function SignUp() {
 
   return (
     <div className="w-full max-w-md rounded-2xl border border-white/20 bg-white/5 backdrop-blur-xs p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-      <h2 className="mb-6 text-center text-3xl font-bold text-white tracking-wide">
-        Sign Up
-      </h2>
+      <h2 className="mb-6 text-center text-3xl font-bold text-white tracking-wide">Sign Up</h2>
 
       {message && (
         <div className={`mb-4 rounded-xl p-4 text-sm font-medium backdrop-blur-md ${message.type === 'success' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
@@ -88,20 +59,20 @@ export function SignUp() {
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-white/80">
+          <label className="mb-2 block text-sm font-medium text-white/90">
             Email / Mobile Number
           </label>
           <input
-            type="text"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full rounded-xl border border-white/20 bg-white/5 p-3 text-white outline-none transition focus:border-green-500 focus:bg-black/30 placeholder-zinc-400"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-xl border border-white/20 bg-black/60 p-3 text-white font-semibold outline-none transition focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder-zinc-400"
             required
           />
         </div>
 
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-white/80">
+          <label className="mb-2 block text-sm font-medium text-white/90">
             Password
           </label>
           <div className="relative">
@@ -109,13 +80,13 @@ export function SignUp() {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 pr-11 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
+              className="w-full rounded-xl border border-white/20 bg-black/60 p-3 pr-11 text-white font-semibold outline-none transition focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder-zinc-400"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/60 hover:text-white transition-colors cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/70 hover:text-white transition-colors cursor-pointer"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
@@ -128,7 +99,7 @@ export function SignUp() {
         </div>
 
         <div className="mb-6">
-          <label className="mb-2 block text-sm font-medium text-white/80">
+          <label className="mb-2 block text-sm font-medium text-white/90">
             Confirm Password
           </label>
           <div className="relative">
@@ -136,14 +107,14 @@ export function SignUp() {
               type={showConfirmPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 pr-11 text-white outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
+              className="w-full rounded-xl border border-white/20 bg-black/60 p-3 pr-11 text-white font-semibold outline-none transition focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder-zinc-400"
               required
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/60 hover:text-white transition-colors cursor-pointer"
-              aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/70 hover:text-white transition-colors cursor-pointer"
+              aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
             >
               {showConfirmPassword ? (
                 <EyeOff className="size-5 text-green-400" />
@@ -165,9 +136,13 @@ export function SignUp() {
 
       <p className="mt-4 text-center text-sm text-white/70">
         Already have an account?{' '}
-        <Link href="/login" className="font-semibold text-green-400 hover:underline">
+        <button
+          type="button"
+          onClick={onSwitchToLogin}
+          className="font-semibold text-green-400 hover:underline cursor-pointer bg-transparent border-none p-0 inline"
+        >
           Login
-        </Link>
+        </button>
       </p>
     </div>
   )
