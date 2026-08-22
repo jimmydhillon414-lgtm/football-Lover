@@ -59,20 +59,20 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="mb-2 block text-sm font-medium text-white/80">
+          <label className="mb-2 block text-sm font-medium text-white/90">
             Email
           </label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-white/20 bg-white/5 p-3 text-green-400 font-semibold outline-none transition focus:border-green-500 focus:bg-black/30 placeholder-zinc-400"
+            className="w-full rounded-xl border border-white/20 bg-black/60 p-3 text-white font-semibold outline-none transition focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder-zinc-400"
             required
           />
         </div>
 
         <div className="mb-2">
-          <label className="mb-2 block text-sm font-medium text-white/80">
+          <label className="mb-2 block text-sm font-medium text-white/90">
             Password
           </label>
           <div className="relative">
@@ -80,13 +80,13 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-white/15 bg-black/40 backdrop-blur-md p-3 pr-11 text-green-400 font-semibold outline-none transition focus:border-green-500 focus:bg-black/60 placeholder-zinc-500"
+              className="w-full rounded-xl border border-white/20 bg-black/60 p-3 pr-11 text-white font-semibold outline-none transition focus:border-green-400 focus:ring-1 focus:ring-green-400 placeholder-zinc-400"
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/60 hover:text-white transition-colors cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/70 hover:text-white transition-colors cursor-pointer"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
