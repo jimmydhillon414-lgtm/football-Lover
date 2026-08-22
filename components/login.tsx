@@ -32,7 +32,7 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
 
         setTimeout(() => {
           if (onSuccess) onSuccess()
-          
+
           router.push('/#catalog')
           const catalogSection = document.getElementById('catalog')
           if (catalogSection) {
@@ -71,7 +71,7 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
           />
         </div>
 
-        <div className="mb-6">
+        <div className="mb-2">
           <label className="mb-2 block text-sm font-medium text-white/80">
             Password
           </label>
@@ -96,6 +96,16 @@ export function LoginComponent({ onSuccess }: { onSuccess?: () => void }) {
               )}
             </button>
           </div>
+        </div>
+
+        {/* Forgot Password Link */}
+        <div className="mb-6 text-right">
+          <Link
+            href="/forgot-password"
+            className="text-xs font-medium text-green-400 hover:text-green-300 hover:underline transition-colors"
+          >
+            Forgot Password?
+          </Link>
         </div>
 
         <button
