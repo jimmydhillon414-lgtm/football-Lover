@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 
