@@ -11,7 +11,7 @@ import { Testimonials } from '@/components/testimonials'
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
-      <AnnouncementBar />
+    
       <SiteHeader />
       <main>
         <Hero />
