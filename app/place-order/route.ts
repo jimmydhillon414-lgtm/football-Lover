@@ -4,45 +4,46 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    // Active Google Apps Script Web App URL
-    const googleSheetUrl = 'https://script.google.com/macros/s/AKfycbzztgg6HZWQ7jh7yg1UROpe9eKGtxQ9nQN8OegN0VE3MIe2d-Kv8X7UWjvgZPoIaHzB/exec'
+    // 1. Check Google Web App URL
+    const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SHEETS_SCRIPT_URL
 
-    // Address construction with safety fallback
-    const addressParts = [body.street_address, body.city, body.state].filter(Boolean).join(', ')
-    const fullAddress = body.pincode ? `${addressParts} - ${body.pincode}` : addressParts
+    if (!GOOGLE_SCRIPT_URL) {
+      console.error('Missing GOOGLE_SHEETS_SCRIPT_URL environment variable')
+      return NextResponse.json({ error: 'Script URL not configured' }, { status: 500 })
+    }
 
-    // Safe items summary check
-    const itemsSummary = Array.isArray(body.items) 
-      ? body.items.map((i: any) => `${i.name || 'Item'} (x${i.quantity || 1})`).join(', ') 
-      : ''
+    // 2. Formatting items as summary string
+    const itemsSummary = Array.isArray(body.items)
+      ? body.items.map((i: any) => `${i.name} (x${i.qty || 1})`).join(', ')
+      : 'N/A'
 
-    const response = await fetch(googleSheetUrl, {
+    // 3. Forward request to Google Apps Script
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json' 
+      headers: {
+        'Content-Type': 'application/json',
       },
-      redirect: 'follow', // 1. CRITICAL: Redirect follow karna zaroori hai
       body: JSON.stringify({
-        order_number: body.order_number || '',
-        customer_name: body.customer_name || '',
-        customer_email: body.customer_email || '',
-        customer_phone: body.customer_phone || '',
-        shipping_address: fullAddress,
-        total_amount: body.total_amount || 0,
+        order_number: body.order_number,
+        customer_name: body.customer_name,
+        customer_email: body.customer_email,
+        customer_phone: body.customer_phone,
+        shipping_address: `${body.street_address}, ${body.city} - ${body.pincode}`,
+        total_amount: body.total_amount,
         items_summary: itemsSummary,
-        payment_method: body.payment_method || 'COD',
+        payment_method: body.payment_method,
       }),
     })
 
-    const result = await response.json().catch(() => null)
+    const textResult = await res.text()
+    console.log('Google Apps Script Response:', textResult)
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Order sent to seller Google Sheet successfully!',
-      appsScriptResult: result 
-    })
+    return NextResponse.json({ success: true, scriptResponse: textResult })
   } catch (error: any) {
-    console.error('Google Sheet API Error:', error)
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    console.error('Error forwarding to Google Sheet:', error)
+    return NextResponse.json(
+      { error: error.message || 'Failed to sync with Google Sheet' },
+      { status: 500 }
+    )
   }
 }
