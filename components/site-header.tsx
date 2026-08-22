@@ -135,7 +135,7 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* SignUp Modal with Pure & Vibrant AI Background */}
+      {/* SignUp Modal */}
       {mounted && isSignUpOpen && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/20 overflow-y-auto p-4">
           <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
@@ -155,13 +155,18 @@ export function SiteHeader() {
             <span>Home</span>
           </button>
           <div className="w-full max-w-md my-auto relative z-10">
-            <SignUp />
+            <SignUp 
+              onSwitchToLogin={() => {
+                setIsSignUpOpen(false)
+                setIsLoginOpen(true)
+              }} 
+            />
           </div>
         </div>,
         document.body
       )}
 
-      {/* Login Modal with Pure & Vibrant AI Background */}
+      {/* Login Modal */}
       {mounted && isLoginOpen && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/20 overflow-y-auto p-4">
           <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
